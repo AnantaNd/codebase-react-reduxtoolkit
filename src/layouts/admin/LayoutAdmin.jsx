@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   AppBar,
   Box,
+  Breadcrumbs,
   Divider,
   Drawer,
   IconButton,
@@ -11,31 +12,50 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Typography,
+  Link,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
+  Adb,
   Assignment,
   Badge,
   Home,
   Logout,
   ManageAccounts,
+  NavigateNext,
+  SpaceDashboard,
 } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
 const LayoutAdmin = () => {
   const menuItems = [
-    { text: "Home", icon: <Home /> },
-    { text: "Management User", icon: <ManageAccounts /> },
-    { text: "Megalos", icon: <Badge /> },
-    { text: "Assigment", icon: <Assignment /> },
+    { text: "Home", icon: <Home fontSize="small" />, path: "/admin/home" },
+    {
+      text: "Management User",
+      icon: <ManageAccounts fontSize="small" />,
+      path: "/admin/management-user",
+    },
+    {
+      text: "Megalos",
+      icon: <Badge fontSize="small" />,
+      path: "/admin/megalos",
+    },
+    {
+      text: "Assignment",
+      icon: <Assignment fontSize="small" />,
+      path: "/admin/assignment",
+    },
   ];
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [isDrawerClosing, setDrawerClosing] = useState(false);
+  const [activePath, setActivePath] = useState("");
+
+  const pathnames = location.pathname.split("/").filter((x) => x);
 
   // Handle toggling the drawer on mobile
   const toggleMobileDrawer = () => {
@@ -59,17 +79,36 @@ const LayoutAdmin = () => {
   // Drawer content
   const renderDrawerContent = () => (
     <div>
-      <Toolbar className="flex items-center justify-center">
-        <Typography variant="h6" noWrap>
-          Admin Logo
-        </Typography>
+      <Toolbar className="flex gap-2 items-center justify-start bgblu">
+        <Adb />
+        <h1 className="text-2xl">Logo</h1>
       </Toolbar>
       <Divider />
       <List>
         {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{item.icon}</ListItemIcon>
+          <ListItem
+            key={item.text}
+            disablePadding
+            onClick={() => {
+              navigate(item.path);
+              setActivePath(item.text);
+              if (isMobileDrawerOpen) closeMobileDrawer();
+            }}
+          >
+            <ListItemButton
+              sx={{
+                bgcolor: activePath === item.text ? "#60a5fa" : "white",
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  marginRight: "5px",
+                  minWidth: "auto",
+                  alignItems: "center",
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
@@ -86,6 +125,8 @@ const LayoutAdmin = () => {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          backgroundColor: "white",
+          color: "black",
         }}
       >
         <Toolbar>
@@ -98,8 +139,8 @@ const LayoutAdmin = () => {
           >
             <MenuIcon />
           </IconButton>
-          <div className="flex items-center justify-between flex-grow">
-            <h1>admin dashboard</h1>
+          <div className="flex items-center justify-between flex-grow ">
+            <h1 className="uppercase text-2xl font-semibold">logo</h1>
             <IconButton color="inherit" edge="start" onClick={onLogout}>
               <Logout />
             </IconButton>
@@ -155,13 +196,45 @@ const LayoutAdmin = () => {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar />
-        <Outlet />
+        <main className="py-14" id="content">
+          <section id="breadcrumbs">
+            <Breadcrumbs
+              sx={{ display: "flex", alignItems: "center", fontSize: "14px" }}
+              separator={<NavigateNext fontSize="inherit" />}
+            >
+              <Link
+                underline="hover"
+                color="inherit"
+                href="/"
+                sx={{ display: "flex", alignItems: "center", gap: "5px" }}
+              >
+                <SpaceDashboard fontSize="inherit" />
+              </Link>
+              <Link
+                underline="hover"
+                color="inherit"
+                sx={{ display: "flex", alignItems: "center", gap: "5px" }}
+              >
+                <h1 className="capitalize">{pathnames[0]}</h1>
+              </Link>
+              <Link
+                underline="hover"
+                color="inherit"
+                sx={{ display: "flex", alignItems: "center", gap: "5px" }}
+              >
+                <h1 className="capitalize">{pathnames[1]}</h1>
+              </Link>
+            </Breadcrumbs>
+          </section>
+          <section id="router_view">
+            <div className="pt-6">
+              <Outlet />
+            </div>
+          </section>
+        </main>
       </Box>
     </Box>
   );
 };
-
-// PropTypes for better type checking
 
 export default LayoutAdmin;

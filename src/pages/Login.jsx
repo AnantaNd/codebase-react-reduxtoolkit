@@ -4,7 +4,7 @@ const Login = () => {
   return (
     <>
       <main className="flex flex-col min-h-screen justify-center items-center">
-        <div className="w-1/3 ">
+        <div className="px-6 w-full md:w-1/2 lg:w-1/3 ">
           <FormLogin />
         </div>
       </main>

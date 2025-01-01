@@ -1,10 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../pages/Login";
-import HomePage from "../pages/Home";
+import HomePage from "../pages/admin/Home";
 import AboutPage from "../pages/About";
 import RoleBasedRoute from "./RoleBasedRoute";
 import PrivateRoute from "./PrivateRoute";
 import LayoutAdmin from "../layouts/admin/LayoutAdmin";
+import MegalosPage from "../pages/admin/Megalos";
+import UserPage from "../pages/admin/User";
+import AssignmentPage from "../pages/admin/Assignment";
 
 function AppRoutes() {
   return (
@@ -29,7 +32,9 @@ function AppRoutes() {
         }
       >
         <Route path="home" element={<HomePage />} />
-        <Route path="about" element={<AboutPage />} />
+        <Route path="megalos" element={<MegalosPage />} />
+        <Route path="management-user" element={<UserPage />} />
+        <Route path="assignment" element={<AssignmentPage />} />
         {/* Jika path /admin kosong atau dihapus, arahkan ke /admin/home */}
         <Route path="*" element={<Navigate to="/admin/home" />} />
       </Route>

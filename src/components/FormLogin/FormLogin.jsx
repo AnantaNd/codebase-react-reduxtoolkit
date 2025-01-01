@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../redux/actions/authAction";
-import { Alert, Button, CircularProgress, TextField } from "@mui/material";
-import { Fingerprint, KeyTwoTone } from "@mui/icons-material";
+import { Alert, Button, LinearProgress, TextField } from "@mui/material";
+import { Fingerprint } from "@mui/icons-material";
 
 const FormLogin = () => {
   const [identify, setIdentify] = useState("");
@@ -19,9 +19,10 @@ const FormLogin = () => {
       alert("Please fill in all fields");
       return;
     }
-    console.log({ identify, password });
+
     try {
       const user = await dispatch(loginUser({ identify, password }));
+
       if (user.data.roles.name === "admin") {
         navigate("/admin/home");
       } else if (user.data.roles.name === "customer") {
@@ -48,6 +49,7 @@ const FormLogin = () => {
             </h1>
           </div>
         </section>
+
         <section>
           <form className="flex flex-col gap-4 p-4">
             <div>
@@ -71,6 +73,7 @@ const FormLogin = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+            <div>{status == "loading" ? <LinearProgress /> : ""}</div>
             <div>
               {status === "failed" ? (
                 <Alert variant="outlined" severity="error">
@@ -80,6 +83,7 @@ const FormLogin = () => {
                 ""
               )}
             </div>
+
             <div className="flex flex-row justify-end">
               <Button
                 disabled={!identify || !password ? true : false}
@@ -89,13 +93,11 @@ const FormLogin = () => {
               >
                 {status == "loading" ? (
                   <>
-                    <CircularProgress size="20px" color="white" />
                     <h1>loading...</h1>
                   </>
                 ) : (
                   <>
                     <h1>Login</h1>
-                    <KeyTwoTone />
                   </>
                 )}
               </Button>

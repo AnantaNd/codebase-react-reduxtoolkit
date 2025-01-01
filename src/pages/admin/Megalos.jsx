@@ -1,11 +1,10 @@
-const Home = () => {
+const Megalos = () => {
   return (
     <>
       <main className="min-h-screen ">
-        <h1>home</h1>
+        <h1>Megalos</h1>
       </main>
     </>
   );
 };
-
-export default Home;
+export default Megalos;
