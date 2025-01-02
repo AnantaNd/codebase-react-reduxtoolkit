@@ -2,7 +2,7 @@ import axios from "axios";
 import { redirect } from "react-router-dom";
 
 const apiClient = axios.create({
-  baseURL: "https://multitenancy.rnd.zidanfath.com/api/v1/", // Ganti dengan base URL API Anda
+  baseURL: "https://example.com/api", // Ganti dengan base URL API Anda
   timeout: 10000, // Waktu timeout (opsional)
   headers: {
     "Content-Type": "application/json",
